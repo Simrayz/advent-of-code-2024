@@ -1,4 +1,3 @@
-
 import sys
 
 def get_location_id_lists(path: str) -> tuple[list[int], list[int]]: 
