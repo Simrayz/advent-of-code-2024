@@ -7,14 +7,14 @@ fn main() {
     println!("Part 2: {}", result_part2);
 }
 
+// Part 1 - Find number of safe rows
 fn process_part1(input: &str) -> usize {
     let rows = parse_rows(input);
-
-    let safe_reports = rows.into_iter().filter(|row| valid_row(&row)).count();
-
+    let safe_reports = rows.into_iter().filter(valid_row).count();
     return safe_reports;
 }
 
+// Common utilities
 fn parse_rows(input: &str) -> Vec<Vec<i64>> {
     let mut rows = Vec::<Vec<i64>>::new();
     for line in input.lines() {
@@ -43,34 +43,32 @@ fn valid_row(row: &Vec<i64>) -> bool {
 
     return valid_levels;
 }
+// End common utilities
 
+// Part 2 - Find number of safe rows with Problem Dampener
 fn process_part2(input: &str) -> i32 {
     let rows = parse_rows(input);
-
-    let safe_reports = rows
-        .into_iter()
-        .filter(|row| {
-            if valid_row(row) {
-                return true;
-            }
-            row.iter().enumerate().any(|(i, _)| {
-                let is_valid = {
-                    let new_row = row
-                        .iter()
-                        .enumerate()
-                        .filter(|&(j, _)| j != i)
-                        .map(|(_, &val)| val)
-                        .collect::<Vec<i64>>();
-                    valid_row(&new_row)
-                };
-                return is_valid;
-            })
-        })
-        .count();
-
-    dbg!(safe_reports);
+    let safe_reports = rows.into_iter().filter(validate_row_permutations).count();
 
     return safe_reports as i32;
+}
+
+fn validate_row_permutations(row: &Vec<i64>) -> bool {
+    if valid_row(row) {
+        return true;
+    }
+    row.iter().enumerate().any(|(i, _)| {
+        let is_valid = {
+            let new_row = row
+                .iter()
+                .enumerate()
+                .filter(|&(j, _)| j != i)
+                .map(|(_, &val)| val)
+                .collect::<Vec<i64>>();
+            valid_row(&new_row)
+        };
+        return is_valid;
+    })
 }
 
 #[cfg(test)]
