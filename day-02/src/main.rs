@@ -10,7 +10,7 @@ fn main() {
 // Part 1 - Find number of safe rows
 fn process_part1(input: &str) -> usize {
     let rows = parse_rows(input);
-    let safe_reports = rows.into_iter().filter(valid_row).count();
+    let safe_reports = rows.into_iter().filter(check_safety).count();
     return safe_reports;
 }
 
@@ -28,33 +28,28 @@ fn parse_rows(input: &str) -> Vec<Vec<i64>> {
     return rows;
 }
 
-fn valid_row(row: &Vec<i64>) -> bool {
-    let all_ascending = row.windows(2).all(|pair| pair[0] < pair[1]);
-    let all_descending = row.windows(2).all(|pair| pair[0] > pair[1]);
+fn check_safety(row: &Vec<i64>) -> bool {
+    let safety_scores = (0..row.len() - 1)
+        .map(|i| row[i] - row[i + 1])
+        .collect::<Vec<i64>>();
 
-    if !all_ascending && !all_descending {
-        return false;
-    }
+    let valid_ascending = safety_scores.iter().all(|x| *x >= 1 && *x <= 3);
+    let valid_descending = safety_scores.iter().all(|x| *x <= -1 && *x >= -3);
 
-    let valid_levels = row.windows(2).all(|pair| {
-        let diff = (pair[1] - pair[0]).abs();
-        return 1 <= diff && diff <= 3;
-    });
-
-    return valid_levels;
+    return valid_ascending || valid_descending;
 }
 // End common utilities
 
 // Part 2 - Find number of safe rows with Problem Dampener
 fn process_part2(input: &str) -> i32 {
     let rows = parse_rows(input);
-    let safe_reports = rows.into_iter().filter(validate_row_permutations).count();
+    let safe_reports = rows.into_iter().filter(check_safety_with_dampening).count();
 
     return safe_reports as i32;
 }
 
-fn validate_row_permutations(row: &Vec<i64>) -> bool {
-    if valid_row(row) {
+fn check_safety_with_dampening(row: &Vec<i64>) -> bool {
+    if check_safety(row) {
         return true;
     }
     row.iter().enumerate().any(|(i, _)| {
@@ -65,7 +60,7 @@ fn validate_row_permutations(row: &Vec<i64>) -> bool {
                 .filter(|&(j, _)| j != i)
                 .map(|(_, &val)| val)
                 .collect::<Vec<i64>>();
-            valid_row(&new_row)
+            check_safety(&new_row)
         };
         return is_valid;
     })
