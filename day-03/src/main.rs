@@ -39,22 +39,21 @@ fn process_part2(input: &str) -> i64 {
         .sum();
 }
 fn process_valid_instructions(input: &str) -> Vec<String> {
-    let instructions = get_valid_instructions(input);
-
-    let mut filtered_instructions: Vec<String> = Vec::new();
-
-    let mut include_instructions = true;
-    for instruction in instructions {
-        match instruction.as_str() {
-            "do()" => include_instructions = true,
-            "don't()" => include_instructions = false,
-            _ => {
-                if include_instructions {
-                    filtered_instructions.push(instruction);
+    let filtered_instructions = get_valid_instructions(input)
+        .into_iter()
+        .fold(
+            (true, Vec::<String>::new()),
+            |(mut include_instructions, mut acc), instruction| {
+                match instruction.as_str() {
+                    "do()" => include_instructions = true,
+                    "don't()" => include_instructions = false,
+                    _ if include_instructions => acc.push(instruction),
+                    _ => (),
                 }
-            }
-        }
-    }
+                (include_instructions, acc)
+            },
+        )
+        .1;
 
     return filtered_instructions;
 }
