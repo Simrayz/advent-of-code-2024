@@ -1,0 +1,9 @@
+[package]
+name = "day-04"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+glam.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
