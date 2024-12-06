@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use glam::IVec2;
 
@@ -39,5 +39,61 @@ impl Board {
             start_position,
             positions,
         }
+    }
+    pub fn find_unique_positions(&self) -> HashSet<IVec2> {
+        let positions = find_unique_positions(self.start_position, &self.positions);
+
+        return positions;
+    }
+
+    pub fn find_unique_positions_count(&self) -> usize {
+        self.find_unique_positions().len()
+    }
+}
+
+fn find_unique_positions(
+    start_position: IVec2,
+    positions: &HashMap<IVec2, char>,
+) -> HashSet<IVec2> {
+    let mut current_position = start_position;
+    let mut visited = HashSet::<IVec2>::new();
+    let mut direction = IVec2::new(-1, 0);
+
+    loop {
+        visited.insert(current_position);
+        let next_position = current_position + direction;
+        let next_direction = match positions.get(&next_position) {
+            Some('#') => Some(rotate_direction(direction)),
+            None => None,
+            Some(_) => Some(direction),
+        };
+
+        match next_direction {
+            None => break,
+            Some(new_direction) => {
+                let new_position = current_position + new_direction;
+                current_position = new_position;
+                direction = new_direction;
+            }
+        }
+    }
+
+    return visited;
+}
+
+pub fn rotate_direction(direction: IVec2) -> IVec2 {
+    IVec2::new(direction.y, -direction.x)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test_log::test]
+    fn test_rotate_direction() -> miette::Result<()> {
+        let direction = IVec2::new(1, 0);
+        let result = rotate_direction(direction);
+        assert_eq!(IVec2::new(0, -1), result);
+        Ok(())
     }
 }

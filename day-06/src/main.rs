@@ -6,5 +6,8 @@ fn main() -> miette::Result<()> {
 
     println!("Part 1: {}", solution);
 
+    let solution = part2::process(input)?;
+    println!("Part 2: {}", solution);
+
     Ok(())
 }
