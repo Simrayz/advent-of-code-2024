@@ -3,10 +3,11 @@ members = ["day-*"]
 resolver = "2"
 
 [workspace.dependencies]
+rayon = "1.10.0"
 glam = "0.29.0"
 tracing = "0.1.41"
 tracing-subscriber = { version = "0.3.18", features = ["fmt", "env-filter"] }
-divan = "0.1.16"
+divan = "0.1.17"
 test-log = { version = "0.2.13", default-features = false, features = [
     "trace",
 ] }

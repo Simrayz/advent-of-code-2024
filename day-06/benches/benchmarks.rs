@@ -6,6 +6,11 @@ fn main() {
 }
 
 #[divan::bench]
+fn parser() {
+    board::Board::new(divan::black_box(include_str!("../input2.txt",)));
+}
+
+#[divan::bench]
 fn part1() {
     part1::process(divan::black_box(include_str!("../input2.txt",))).unwrap();
 }

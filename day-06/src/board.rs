@@ -1,46 +1,33 @@
 use std::collections::{HashMap, HashSet};
 
-use glam::IVec2;
+use glam::I8Vec2;
 
 #[derive(Debug)]
 pub struct Board {
-    pub board: Vec<Vec<char>>,
-    pub start_position: IVec2,
-    pub positions: HashMap<IVec2, char>,
+    pub start_position: I8Vec2,
+    pub positions: HashMap<I8Vec2, char>,
 }
 
 impl Board {
     pub fn new(input: &str) -> Self {
-        let mut positions = HashMap::<IVec2, char>::new();
-        let mut start_position = IVec2::new(0, 0);
-        let board: Vec<Vec<char>> = input
-            .lines()
-            .into_iter()
-            .enumerate()
-            .map(|(row, line)| {
-                let line = line
-                    .chars()
-                    .enumerate()
-                    .filter_map(|(col, c)| {
-                        positions.insert(IVec2::new(row as i32, col as i32), c);
-                        if c == '^' {
-                            start_position = IVec2::new(row as i32, col as i32);
-                            return Some('X');
-                        }
-                        Some(c)
-                    })
-                    .collect::<Vec<char>>();
-                line
-            })
-            .collect::<Vec<Vec<char>>>();
+        let mut positions = HashMap::<I8Vec2, char>::new();
+        let mut start_position = I8Vec2::new(0, 0);
+
+        for (row, line) in input.lines().enumerate() {
+            for (col, c) in line.chars().enumerate() {
+                positions.insert(I8Vec2::new(row as i8, col as i8), c);
+                if c == '^' {
+                    start_position = I8Vec2::new(row as i8, col as i8);
+                }
+            }
+        }
 
         Self {
-            board,
             start_position,
             positions,
         }
     }
-    pub fn find_unique_positions(&self) -> HashSet<IVec2> {
+    pub fn find_unique_positions(&self) -> HashSet<I8Vec2> {
         let positions = find_unique_positions(self.start_position, &self.positions);
 
         return positions;
@@ -52,12 +39,12 @@ impl Board {
 }
 
 fn find_unique_positions(
-    start_position: IVec2,
-    positions: &HashMap<IVec2, char>,
-) -> HashSet<IVec2> {
+    start_position: I8Vec2,
+    positions: &HashMap<I8Vec2, char>,
+) -> HashSet<I8Vec2> {
     let mut current_position = start_position;
-    let mut visited = HashSet::<IVec2>::new();
-    let mut direction = IVec2::new(-1, 0);
+    let mut visited = HashSet::<I8Vec2>::new();
+    let mut direction = I8Vec2::new(-1, 0);
 
     loop {
         visited.insert(current_position);
@@ -81,8 +68,8 @@ fn find_unique_positions(
     return visited;
 }
 
-pub fn rotate_direction(direction: IVec2) -> IVec2 {
-    IVec2::new(direction.y, -direction.x)
+pub fn rotate_direction(direction: I8Vec2) -> I8Vec2 {
+    I8Vec2::new(direction.y, -direction.x)
 }
 
 #[cfg(test)]
@@ -91,9 +78,9 @@ mod tests {
 
     #[test_log::test]
     fn test_rotate_direction() -> miette::Result<()> {
-        let direction = IVec2::new(1, 0);
+        let direction = I8Vec2::new(1, 0);
         let result = rotate_direction(direction);
-        assert_eq!(IVec2::new(0, -1), result);
+        assert_eq!(I8Vec2::new(0, -1), result);
         Ok(())
     }
 }

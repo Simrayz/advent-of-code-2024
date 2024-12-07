@@ -10,6 +10,7 @@ tracing-subscriber.workspace = true
 divan.workspace = true
 test-log.workspace = true
 miette.workspace = true
+rayon.workspace = true
 
 [[bench]]
 name = "day-06-bench"
