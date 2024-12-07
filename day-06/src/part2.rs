@@ -1,16 +1,16 @@
+use fxhash::FxHashSet;
 use glam::I8Vec2;
 use rayon::prelude::*;
-use std::collections::HashSet;
 
 use crate::board::{rotate_direction, Board};
 
 pub fn process(input: &str) -> miette::Result<String> {
     let board = Board::new(input);
 
-    let mut visited_positions: HashSet<I8Vec2> = board.find_unique_positions();
+    let mut visited_positions: FxHashSet<_> = board.find_unique_positions();
     visited_positions.remove(&board.start_position);
 
-    let wall_positions: HashSet<_> = board
+    let wall_positions: FxHashSet<_> = board
         .positions
         .iter()
         .filter_map(|(pos, value)| match value {
@@ -25,7 +25,7 @@ pub fn process(input: &str) -> miette::Result<String> {
             let mut current_position = board.start_position;
             let mut direction = I8Vec2::new(-1, 0);
             let mut visited_positions =
-                HashSet::<(I8Vec2, I8Vec2)>::from([(board.start_position, direction.clone())]);
+                FxHashSet::from_iter([(board.start_position, direction.clone())]);
 
             loop {
                 let next_position = current_position + direction;

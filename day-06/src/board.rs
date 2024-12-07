@@ -1,16 +1,17 @@
-use std::collections::{HashMap, HashSet};
+use std::iter;
 
+use fxhash::{FxHashMap, FxHashSet};
 use glam::I8Vec2;
 
 #[derive(Debug)]
 pub struct Board {
     pub start_position: I8Vec2,
-    pub positions: HashMap<I8Vec2, char>,
+    pub positions: FxHashMap<I8Vec2, char>,
 }
 
 impl Board {
     pub fn new(input: &str) -> Self {
-        let mut positions = HashMap::<I8Vec2, char>::new();
+        let mut positions = FxHashMap::<I8Vec2, char>::default();
         let mut start_position = I8Vec2::new(0, 0);
 
         for (row, line) in input.lines().enumerate() {
@@ -27,7 +28,7 @@ impl Board {
             positions,
         }
     }
-    pub fn find_unique_positions(&self) -> HashSet<I8Vec2> {
+    pub fn find_unique_positions(&self) -> FxHashSet<I8Vec2> {
         let positions = find_unique_positions(self.start_position, &self.positions);
 
         return positions;
@@ -40,10 +41,10 @@ impl Board {
 
 fn find_unique_positions(
     start_position: I8Vec2,
-    positions: &HashMap<I8Vec2, char>,
-) -> HashSet<I8Vec2> {
+    positions: &FxHashMap<I8Vec2, char>,
+) -> FxHashSet<I8Vec2> {
     let mut current_position = start_position;
-    let mut visited = HashSet::<I8Vec2>::new();
+    let mut visited = FxHashSet::from_iter(iter::once(current_position));
     let mut direction = I8Vec2::new(-1, 0);
 
     loop {

@@ -11,6 +11,7 @@ divan.workspace = true
 test-log.workspace = true
 miette.workspace = true
 rayon.workspace = true
+fxhash.workspace = true
 
 [[bench]]
 name = "day-06-bench"
