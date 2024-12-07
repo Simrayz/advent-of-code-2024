@@ -1,5 +1,5 @@
 use fxhash::FxHashSet;
-use glam::I8Vec2;
+use glam::I16Vec2;
 use rayon::prelude::*;
 
 use crate::board::{rotate_direction, Board};
@@ -23,7 +23,7 @@ pub fn process(input: &str) -> miette::Result<String> {
         .par_iter()
         .filter(|new_wall_position| {
             let mut current_position = board.start_position;
-            let mut direction = I8Vec2::new(-1, 0);
+            let mut direction = I16Vec2::new(-1, 0);
             let mut visited_positions =
                 FxHashSet::from_iter([(board.start_position, direction.clone())]);
 
