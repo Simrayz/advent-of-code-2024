@@ -1,0 +1,22 @@
+[package]
+name = "day-12"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+glam.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+miette.workspace = true
+rayon.workspace = true
+fxhash.workspace = true
+itertools.workspace = true
+
+[dev-dependencies]
+divan.workspace = true
+test-log.workspace = true
+
+[[bench]]
+name = "day-12-bench"
+path = "benches/benchmarks.rs"
+harness = false
