@@ -1,4 +1,4 @@
-use template_day::{part1, part2};
+use {{crate_name}}::{part1, part2};
 
 fn main() {
     // Run registered benchmarks.

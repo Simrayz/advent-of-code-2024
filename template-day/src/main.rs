@@ -1,5 +1,8 @@
-use template_day::*;
+use {{crate_name}}::*;
 
+use miette::Context;
+
+#[tracing::instrument]
 fn main() -> miette::Result<()> {
     let input: &str = include_str!("../input2.txt");
 

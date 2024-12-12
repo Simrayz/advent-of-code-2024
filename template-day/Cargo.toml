@@ -1,5 +1,5 @@
 [package]
-name = "template-day"
+name = "{{project-name}}"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,14 +7,16 @@ edition = "2021"
 glam.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
-divan.workspace = true
-test-log.workspace = true
 miette.workspace = true
 rayon.workspace = true
 fxhash.workspace = true
 itertools.workspace = true
 
+[dev-dependencies]
+divan.workspace = true
+test-log.workspace = true
+
 [[bench]]
-name = "template-day"
+name = "{{project-name}}-bench"
 path = "benches/benchmarks.rs"
 harness = false
