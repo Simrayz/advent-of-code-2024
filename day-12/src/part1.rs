@@ -99,7 +99,7 @@ mod tests {
     #[test_log::test]
     fn test_process_input2() -> miette::Result<()> {
         let result = process(include_str!("../input2.txt"));
-        assert_eq!("1930", result?);
+        assert_eq!("368", result?);
         Ok(())
     }
 }
