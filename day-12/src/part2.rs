@@ -85,33 +85,39 @@ fn get_valid_neighbors(
 
 fn get_region_price(garden: &HashMap<(i32, i32), char>, region: &Vec<(i32, i32)>) -> i32 {
     let group_id = garden.get(&region[0]).unwrap();
-    let mut count = 0;
 
-    region.iter().for_each(|node| {
-        let direction_iterator = DIRECTIONS.iter().circular_tuple_windows::<(_, _)>();
-        for ([x, y], [x1, y1]) in direction_iterator {
+    let corner_count: i32 = region
+        .iter()
+        .map(|node| count_corners(garden, node, group_id))
+        .sum();
+
+    corner_count * (region.len() as i32)
+}
+
+fn count_corners(garden: &HashMap<(i32, i32), char>, vertex: &(i32, i32), group_id: &char) -> i32 {
+    DIRECTIONS
+        .iter()
+        .circular_tuple_windows()
+        .fold(0, |corners, ([x1, y1], [x2, y2])| {
             let neighbor1 = garden
-                .get(&(x + node.0, y + node.1))
+                .get(&(x1 + vertex.0, y1 + vertex.1))
                 .is_some_and(|c| c == group_id);
             let neighbor2 = garden
-                .get(&(x1 + node.0, y1 + node.1))
+                .get(&(x2 + vertex.0, y2 + vertex.1))
                 .is_some_and(|c| c == group_id);
-
             if !neighbor1 && !neighbor2 {
-                count += 1;
-            }
-            if neighbor1
+                return corners + 1;
+            } else if neighbor1
                 && neighbor2
                 && garden
-                    .get(&(x + x1 + node.0, y + y1 + node.1))
+                    .get(&(x1 + x2 + vertex.0, y1 + y2 + vertex.1))
                     .is_some_and(|char| char != group_id)
             {
-                count += 1;
+                return corners + 1;
+            } else {
+                return corners;
             }
-        }
-    });
-
-    count * (region.len() as i32)
+        })
 }
 
 #[cfg(test)]
