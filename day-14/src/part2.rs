@@ -1,6 +1,7 @@
 use crate::robot::Board;
+use fxhash::FxHashSet;
 use glam::IVec2;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 pub fn process(input: &str, debug: bool) -> miette::Result<String> {
     let board = Board::new(input);
@@ -9,7 +10,7 @@ pub fn process(input: &str, debug: bool) -> miette::Result<String> {
     let mut christmas_map = HashMap::<IVec2, usize>::new();
 
     loop {
-        let mut positions = HashSet::<IVec2>::new();
+        let mut positions = FxHashSet::<IVec2>::default();
 
         for robot in board.robots.iter() {
             let new_position = board.get_new_robot_position(robot, time);
@@ -23,7 +24,7 @@ pub fn process(input: &str, debug: bool) -> miette::Result<String> {
         if positions.len() == board.robots.len() {
             if debug {
                 for position in positions.iter() {
-                    christmas_map.insert(*position, 4);
+                    christmas_map.insert(*position, 1);
                 }
             }
             break;

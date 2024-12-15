@@ -42,7 +42,8 @@ impl Board {
         let half_width = self.width / 2;
         let half_height = self.height / 2;
 
-        let [col, row] = position.to_array();
+        let col = position.x;
+        let row = position.y;
 
         if (col == half_width) || (row == half_height) {
             return None;
