@@ -1,4 +1,4 @@
-use {{crate_name}}::*;
+use day_16::*;
 
 #[tracing::instrument]
 fn main() -> miette::Result<()> {
