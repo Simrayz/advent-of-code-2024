@@ -42,10 +42,6 @@ impl MemorySpace {
         }
     }
 
-    fn add_corruption(&mut self, corruption: IVec2) {
-        self.fallen.insert(corruption);
-    }
-
     fn find_valid_successors(&self, position: IVec2) -> Vec<(IVec2, usize)> {
         DIRECTIONS
             .iter()
@@ -63,19 +59,6 @@ impl MemorySpace {
                 }
             })
             .collect()
-    }
-
-    fn display(&self) {
-        for col in 0..=self.width {
-            for row in 0..=self.height {
-                let position = IVec2::new(row as i32, col as i32);
-                match self.fallen.get(&position) {
-                    Some(_) => print!("#"),
-                    _ => print!("."),
-                }
-            }
-            println!();
-        }
     }
 }
 
