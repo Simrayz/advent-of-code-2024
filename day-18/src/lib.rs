@@ -6,14 +6,13 @@ pub mod part1;
 pub mod part2;
 
 pub struct MemorySpace {
-    width: usize,
-    height: usize,
+    size: usize,
     corruptions: Vec<IVec2>,
     fallen: HashSet<IVec2>,
 }
 
 impl MemorySpace {
-    fn new(width: usize, height: usize, input: &str) -> Self {
+    pub fn new(size: usize, input: &str) -> Self {
         let corruptions: Vec<IVec2> = input
             .lines()
             .map(|line| {
@@ -26,8 +25,7 @@ impl MemorySpace {
             .collect();
 
         Self {
-            width,
-            height,
+            size,
             corruptions,
             fallen: HashSet::new(),
         }
@@ -57,8 +55,8 @@ fn find_valid_successors(
             let next_position = position + direction;
             let out_of_bounds = next_position.x < 0
                 || next_position.y < 0
-                || next_position.x > space.width as i32
-                || next_position.y > space.height as i32;
+                || next_position.x > space.size as i32
+                || next_position.y > space.size as i32;
 
             if collisions.contains(&next_position) || out_of_bounds {
                 None
@@ -94,7 +92,7 @@ mod tests {
         );
         let input: &str = include_str!("../input-example.txt");
 
-        let mut space = MemorySpace::new(7, 7, input);
+        let mut space = MemorySpace::new(7, input);
         space.simulate(12);
 
         assert_eq!(space.fallen, collissions);

@@ -1,4 +1,9 @@
+With brute force:
 day_18_bench  fastest       │ slowest       │ median        │ mean          │ samples │ iters
 ├─ part1      682 µs        │ 897.5 µs      │ 697.8 µs      │ 706 µs        │ 100     │ 100
 ╰─ part2      114.2 ms      │ 126.8 ms      │ 116.2 ms      │ 117.1 ms      │ 100     │ 100
 
+With binary search:
+day_18_bench  fastest       │ slowest       │ median        │ mean          │ samples │ iters
+├─ part1      704.2 µs      │ 940.9 µs      │ 722.1 µs      │ 729.8 µs      │ 100     │ 100
+╰─ part2      1.369 ms      │ 1.626 ms      │ 1.391 ms      │ 1.399 ms      │ 100     │ 100
