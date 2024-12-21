@@ -5,7 +5,7 @@ use glam::IVec2;
 pub mod part1;
 pub mod part2;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Maze {
     start: IVec2,
     end: IVec2,

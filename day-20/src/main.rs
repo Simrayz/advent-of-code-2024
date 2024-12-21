@@ -7,7 +7,7 @@ fn main() -> miette::Result<()> {
     let solution = part1::process(input, 100)?;
     println!("Part 1: {}", solution);
 
-    let solution = part2::process(input)?;
+    let solution = part2::process(input, 100)?;
     println!("Part 2: {}", solution);
 
     Ok(())

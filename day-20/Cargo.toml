@@ -10,6 +10,7 @@ tracing-subscriber.workspace = true
 miette.workspace = true
 rayon.workspace = true
 pathfinding = "4.12.0"
+itertools.workspace = true
 
 [dev-dependencies]
 divan.workspace = true

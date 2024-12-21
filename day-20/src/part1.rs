@@ -1,4 +1,6 @@
-use std::collections::{HashMap, HashSet};
+use pathfinding::prelude::dijkstra;
+use rayon::prelude::*;
+use std::collections::HashMap;
 
 use crate::Maze;
 use glam::IVec2;
@@ -8,37 +10,22 @@ const DIRECTIONS: [IVec2; 4] = [IVec2::X, IVec2::NEG_X, IVec2::Y, IVec2::NEG_Y];
 pub fn process(input: &str, threshold: usize) -> miette::Result<String> {
     let map = Maze::new(input);
 
-    let mut visited = HashSet::from([map.start]);
-    let mut path = Vec::new();
-    let mut current = map.start;
-
-    loop {
-        let next: IVec2 = *DIRECTIONS
-            .iter()
-            .filter_map(|direction| {
-                let next = *direction + current;
-                match map
-                    .path
-                    .get(&next)
-                    .is_some_and(|_| !visited.contains(&next))
-                {
-                    true => Some(next),
-                    false => None,
-                }
-            })
-            .collect::<Vec<IVec2>>()
-            .first()
-            .unwrap();
-
-        path.push(next);
-        visited.insert(next);
-
-        if next == map.end {
-            break;
-        }
-
-        current = next;
-    }
+    let (path, _non_cheat_cost) = dijkstra(
+        &map.start,
+        |position| {
+            DIRECTIONS
+                .iter()
+                .filter_map(|direction| {
+                    let next_position = direction + position;
+                    map.path
+                        .contains(&next_position)
+                        .then_some((next_position, 1))
+                })
+                .collect::<Vec<_>>()
+        },
+        |&pos| pos == map.end,
+    )
+    .expect("A valid AoC path");
 
     let shortcut_count = get_shortcuts_above_threshold(&path, threshold);
 
@@ -53,7 +40,7 @@ fn get_shortcuts_above_threshold(path: &Vec<IVec2>, threshold: usize) -> usize {
         .collect();
 
     let shortcut_count = path
-        .iter()
+        .par_iter()
         .enumerate()
         .map(|(idx, pos)| {
             DIRECTIONS
