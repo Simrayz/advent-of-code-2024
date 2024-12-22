@@ -1,4 +1,4 @@
-pub fn process(input: &str) -> miette::Result<String> {
+pub fn process(_input: &str) -> miette::Result<String> {
     Ok("".to_string())
 }
 
